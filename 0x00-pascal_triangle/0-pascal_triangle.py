@@ -18,11 +18,10 @@ def pascal_triangle(n):
 
     triangle = [[1]]
     for i in range(1, n):
-        row = [1]  # First element of each row is always 1
-        # Generate middle values by adding two consecutive elements of the previous row
+        row = [1]
         for j in range(1, i):
             row.append(triangle[i - 1][j - 1] + triangle[i - 1][j])
-        row.append(1)  # Last element of each row is always 1
+        row.append(1)
         triangle.append(row)
     
     return triangle
@@ -35,5 +34,4 @@ if __name__ == "__main__":
         for row in triangle:
             print("[{}]".format(",".join([str(x) for x in row])))
 
-    # Example usage
     print_triangle(pascal_triangle(5))
