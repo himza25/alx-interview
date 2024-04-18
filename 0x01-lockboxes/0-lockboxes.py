@@ -1,39 +1,20 @@
 #!/usr/bin/python3
-"""
-This module contains a function canUnlockAll which determines if all boxes in
-a given list can be unlocked using the keys contained within them. The function
-uses an iterative approach to simulate opening boxes
-by tracking available keys.
-"""
-
+"""method that determines if all the boxes can be opened"""
 
 def canUnlockAll(boxes):
-    """
-    Determine if all boxes can be opened using keys inside them.
 
-    Args:
-    boxes (list of lists of int): Each sublist represents keys inside a box.
-
-    Returns:
-    bool: True if all boxes can be opened, otherwise False.
-    """
-    if not isinstance(boxes, list) or not boxes:
+    if (type(boxes) is not list):
         return False
 
-    keys = set([0])  # Start with the first box unlocked
-    for key in keys:
-        keys.update([new_key for new_key in boxes[key]
-                     if new_key not in keys and new_key < len(boxes)])
+    if (len(boxes) == 0):
+        return False
 
-    return len(keys) == len(boxes)
-
-
-if __name__ == "__main__":
-    boxes = [[1], [2], [3], [4], []]
-    print(canUnlockAll(boxes))  # Expected: True
-
-    boxes = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
-    print(canUnlockAll(boxes))  # Expected: True
-
-    boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
-    print(canUnlockAll(boxes))  # Expected: False
+    keys = [0]
+    for i in keys:
+        for j in boxes[i]:
+            if j not in keys and j != i and j < len(boxes) and j != 0:
+                keys.append(j)
+    if len(keys) == len(boxes):
+        return True
+    else:
+        return False
