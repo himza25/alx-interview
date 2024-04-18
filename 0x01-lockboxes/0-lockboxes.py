@@ -1,24 +1,43 @@
 #!/usr/bin/python3
+"""
+This module contains a function to determine if all boxes can be unlocked
+using keys found within other boxes. It implements a depth-first search (DFS)
+to traverse through the boxes based on the keys each contains.
+
+Usage:
+Execute the script to test the canUnlockAll
+function with predefined box setups.
+"""
+
 
 def canUnlockAll(boxes):
-    """ Determine if all boxes can be opened using keys inside them """
-    def dfs(box_index):
-        """ Perform a depth-first search to check accessible boxes """
-        visited.add(box_index)  # Mark this box as visited
-        for key in boxes[box_index]:  # Traverse the keys in the current box
-            if key not in visited and key < len(boxes):
-                dfs(key)  # Recurse if the key opens an unvisited box
+    """
+    Determine if all boxes can be opened using keys inside them.
 
-    visited = set()  # Track visited boxes
-    dfs(0)  # Start DFS from the first box (unlocked)
-    return len(visited) == len(boxes)  # Check if all boxes were visited
+    Args:
+    boxes (list of lists of int): The list where each element is a list
+    of keys in a box.
+
+    Returns:
+    bool: True if all boxes can be opened, False otherwise.
+    """
+    def dfs(box_index):
+        """Recursive function to perform DFS from the given box index."""
+        visited.add(box_index)
+        for key in boxes[box_index]:
+            if key not in visited and key < len(boxes):
+                dfs(key)
+
+    visited = set()
+    dfs(0)
+    return len(visited) == len(boxes)
 
 
 if __name__ == "__main__":
     boxes = [[1], [2], [3], [4], []]
     print(canUnlockAll(boxes))  # Expected: True
 
-    boxes = [[1, 4, 6], [2], [0, 4, 1], [3, 6, 2], [3], [4, 1], [6]]
+    boxes = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
     print(canUnlockAll(boxes))  # Expected: True
 
     boxes = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
