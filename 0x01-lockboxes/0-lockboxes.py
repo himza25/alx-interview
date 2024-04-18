@@ -1,12 +1,9 @@
 #!/usr/bin/python3
 """
-This module contains a function to determine if all boxes can be unlocked
-using keys found within other boxes. It implements a depth-first search (DFS)
-to traverse through the boxes based on the keys each contains.
-
-Usage:
-Execute the script to test the canUnlockAll
-function with predefined box setups.
+This module contains a function canUnlockAll which determines if all boxes in
+a given list can be unlocked using the keys contained within them. The function
+uses an iterative approach to simulate opening boxes
+by tracking available keys.
 """
 
 
@@ -15,22 +12,20 @@ def canUnlockAll(boxes):
     Determine if all boxes can be opened using keys inside them.
 
     Args:
-    boxes (list of lists of int): The list where each element is a list
-    of keys in a box.
+    boxes (list of lists of int): Each sublist represents keys inside a box.
 
     Returns:
-    bool: True if all boxes can be opened, False otherwise.
+    bool: True if all boxes can be opened, otherwise False.
     """
-    def dfs(box_index):
-        """Recursive function to perform DFS from the given box index."""
-        visited.add(box_index)
-        for key in boxes[box_index]:
-            if key not in visited and key < len(boxes):
-                dfs(key)
+    if not isinstance(boxes, list) or not boxes:
+        return False
 
-    visited = set()
-    dfs(0)
-    return len(visited) == len(boxes)
+    keys = set([0])  # Start with the first box unlocked
+    for key in keys:
+        keys.update([new_key for new_key in boxes[key]
+                     if new_key not in keys and new_key < len(boxes)])
+
+    return len(keys) == len(boxes)
 
 
 if __name__ == "__main__":
