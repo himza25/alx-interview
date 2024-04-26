@@ -1,26 +1,23 @@
 #!/usr/bin/python3
-"""Calculates minimum operations to reach n 'H' characters using "Copy All"
-and "Paste".
-"""
+"""Minimum operations using "Copy All" and "Paste"."""
 
 
 def min_operations(n):
-    """Returns min number of operations to produce n"""
+    """Calculate minimum operations to produce exactly n 'H' chars."""
     if n < 2:
         return 0
     operations = 0
-    current = n
-    for i in range(2, int(n**0.5) + 1):
-        while current % i == 0:
-            operations += i
-            current //= i
-    if current > 1:
-        operations += current
+    factor = 2
+    while n > 1:
+        while n % factor == 0:
+            operations += factor
+            n //= factor
+        factor += 1
     return operations
 
 
 if __name__ == "__main__":
-    test_cases = [4, 12]
+    test_cases = [4, 12, 9]
     for case in test_cases:
-        print(f"Min # of operations to reach {case} characters: "
-              f"{min_operations(case)}")
+        result = min_operations(case)
+        print(f"Min # of operations for {case} chars: {result}")
