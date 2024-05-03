@@ -6,8 +6,8 @@ import re
 import sys
 
 # Regular expression to validate input format
-regex = (r'^([0-9]?[0-9]?[0-9]\.){3}[0-9]?[0-9]?[0-9] - \[\S* \S*] '
-         r'"\S* \S* \S*" [2-5]0[0,1,3,4,5] [0-9]+$')
+regex = (r'^(\d{1,3}\.){3}\d{1,3} - \[\S+ \S+\] '
+         r'"GET /projects/260 HTTP/1\.1" [2-5]0[0,1,3,4,5] \d+$')
 
 # Mapping of valid status codes and their counts
 valid_status_codes = {
@@ -18,14 +18,12 @@ valid_status_codes = {
 # Total size of processed files
 total_file_size = 0
 
-
 def print_stats():
     """Print the total file size and status code frequencies."""
     print(f"File size: {total_file_size}")
     for code, count in sorted(valid_status_codes.items()):
         if count:
             print(f"{code}: {count}")
-
 
 try:
     line_count = 0
@@ -38,6 +36,8 @@ try:
             if status_code in valid_status_codes:
                 valid_status_codes[status_code] += 1
                 total_file_size += file_size
+        else:
+            continue  # Explicitly skip lines that do not match the format
         if line_count % 10 == 0:
             print_stats()
 except KeyboardInterrupt:
