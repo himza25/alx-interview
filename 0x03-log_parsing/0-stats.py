@@ -1,36 +1,46 @@
 #!/usr/bin/python3
+"""
+Parse logs from stdin, count status codes, and sum file sizes.
+"""
+import re
 import sys
-import signal
 
-def handle_signal(sig, frame):
-    """Handle SIGINT for graceful shutdown."""
-    print_stats()
-    sys.exit(0)
+# Regular expression to validate input format
+regex = (r'^([0-9]?[0-9]?[0-9]\.){3}[0-9]?[0-9]?[0-9] - \[\S* \S*] '
+         r'"\S* \S* \S*" [2-5]0[0,1,3,4,5] [0-9]+$')
+
+# Mapping of valid status codes and their counts
+valid_status_codes = {
+    "200": 0, "301": 0, "400": 0, "401": 0,
+    "403": 0, "404": 0, "405": 0, "500": 0
+}
+
+# Total size of processed files
+total_file_size = 0
+
 
 def print_stats():
-    """Output total size and status code frequencies."""
-    print(f"File size: {total_size}")
-    for code in sorted(status_codes):
-        print(f"{code}: {status_codes[code]}")
+    """Print the total file size and status code frequencies."""
+    print(f"File size: {total_file_size}")
+    for code, count in sorted(valid_status_codes.items()):
+        if count:
+            print(f"{code}: {count}")
 
-signal.signal(signal.SIGINT, handle_signal)
-
-status_codes = {}
-total_size = 0
-line_count = 0
 
 try:
+    line_count = 0
     for line in sys.stdin:
         line_count += 1
-        parts = line.split()
-        if (len(parts) != 8 or parts[0].count('.') != 3 or
-                not parts[1].startswith('[') or not parts[6].isdigit()):
-            continue
-        status, size = int(parts[6]), int(parts[7])
-        if status in [200, 301, 400, 401, 403, 404, 405, 500]:
-            status_codes[status] = status_codes.get(status, 0) + 1
-            total_size += size
+        if re.match(regex, line):
+            parts = line.split()
+            status_code = parts[-2]
+            file_size = int(parts[-1])
+            if status_code in valid_status_codes:
+                valid_status_codes[status_code] += 1
+                total_file_size += file_size
         if line_count % 10 == 0:
             print_stats()
 except KeyboardInterrupt:
+    print_stats()
+finally:
     print_stats()
