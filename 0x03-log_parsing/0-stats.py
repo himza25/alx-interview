@@ -18,12 +18,14 @@ valid_status_codes = {
 # Total size of processed files
 total_file_size = 0
 
+
 def print_stats():
     """Print the total file size and status code frequencies."""
     print(f"File size: {total_file_size}")
     for code, count in sorted(valid_status_codes.items()):
         if count:
             print(f"{code}: {count}")
+
 
 try:
     line_count = 0
