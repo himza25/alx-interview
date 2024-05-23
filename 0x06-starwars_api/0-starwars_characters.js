@@ -5,7 +5,7 @@ const movieId = process.argv[2];
 const url = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 
 // Function to fetch character data
-function fetchCharacter(characterUrl, callback) {
+function fetchCharacter (characterUrl, callback) {
   request(characterUrl, (error, response, body) => {
     if (error) {
       callback(error);
