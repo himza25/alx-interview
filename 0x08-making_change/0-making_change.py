@@ -16,13 +16,13 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    dp = [float('inf')] * (total + 1)  # Initialize DP table
+    # Initialize DP table with a large value representing infinity
+    dp = [float('inf')] * (total + 1)
     dp[0] = 0  # Base case
 
     for coin in coins:
         for i in range(coin, total + 1):
-            if dp[i - coin] != float('inf'):
-                dp[i] = min(dp[i], dp[i - coin] + 1)  # Update DP table
+            dp[i] = min(dp[i], dp[i - coin] + 1)  # Update DP table
 
     return dp[total] if dp[total] != float('inf') else -1  # Return result
 
