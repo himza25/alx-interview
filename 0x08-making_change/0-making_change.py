@@ -1,30 +1,33 @@
 #!/usr/bin/python3
 """
-Determine the fewest number of coins needed to meet a given amount total.
+Change comes from within
 """
+
+
+def help(start, end, coins, total, number, time):
+    """
+    Backtracking recursion that helps to find the number of coins.
+    """
+    if number == total:
+        return time
+    if number > total or start > end:
+        return float('inf')  # Return infinity if the solution is not possible
+    # Try including the current coin and excluding it
+    include = help(start, end, coins, total, number + coins[start], time + 1)
+    exclude = help(start + 1, end, coins, total, number, time)
+    return min(include, exclude)
 
 
 def makeChange(coins, total):
     """
-    Args:
-        coins (list of int): Coin values.
-        total (int): Amount to be made.
-
-    Returns:
-        int: Fewest number of coins needed, or -1 if not possible.
+    Given a pile of coins of different values,
+    determine the fewest number of coins needed to meet a given amount total.
     """
     if total <= 0:
         return 0
-
-    # Initialize DP table with a large value representing infinity
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0  # Base case
-
-    for coin in coins:
-        for i in range(coin, total + 1):
-            dp[i] = min(dp[i], dp[i - coin] + 1)  # Update DP table
-
-    return dp[total] if dp[total] != float('inf') else -1  # Return result
+    sorted_coins = sorted(coins, reverse=True)
+    result = help(0, len(sorted_coins) - 1, sorted_coins, total, 0, 0)
+    return result if result != float('inf') else -1
 
 
 if __name__ == "__main__":
