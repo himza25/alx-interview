@@ -3,6 +3,7 @@
 Change comes from within
 """
 
+
 def help(start, end, coins, total, number, time):
     """
     Backtracking recursion to find the number of coins.
@@ -16,6 +17,7 @@ def help(start, end, coins, total, number, time):
         return time
     return help(start + 1, end, coins, total, number, time)
 
+
 def makeChange(coins, total):
     """
     Find the fewest number of coins needed to meet total.
@@ -24,6 +26,7 @@ def makeChange(coins, total):
         return 0
     sorted_coins = sorted(coins, reverse=True)
     return help(0, len(sorted_coins) - 1, sorted_coins, total, 0, 0)
+
 
 if __name__ == "__main__":
     # Main file for testing
